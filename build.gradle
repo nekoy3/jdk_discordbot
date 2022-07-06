@@ -45,6 +45,8 @@ javafx {
     modules = ['javafx.controls', 'javafx.fxml']
 }
 
+apply plugin: 'kotlin-kapt'
+
 dependencies {
 
     implementation 'junit:junit:4.13.1'
@@ -52,13 +54,9 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
     implementation("net.dv8tion:JDA:5.0.0-alpha.12")
-    //https://www.codegrepper.com/code-examples/java/LF4J%3A+Failed+to+load+class+%22org.slf4j.impl.StaticMDCBinder%22
-    //https://mvnrepository.com/artifact/org.slf4j/slf4j-api
-    //https://qiita.com/Kintech/items/c6484b60e0f1a666d0d8
-    //エラーは放置でも問題なく動きそう
-    implementation("org.slf4j:slf4j-api:2.0.0-alpha7")
-    implementation("org.slf4j:slf4j-simple:2.0.0-alpha7")
-    implementation("org.slf4j:slf4j-log4j12:2.0.0-alpha7")
+
+    implementation "androidx.room:room-runtime:2.2.5"
+    kapt "androidx.room:room-compiler:2.2.5"
 }
 
 test {

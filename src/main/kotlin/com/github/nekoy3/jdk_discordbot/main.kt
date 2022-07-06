@@ -11,10 +11,17 @@ import javax.security.auth.login.LoginException
 import kotlin.system.exitProcess
 
 class BotBuild() {
+    //configファイルの読み込み
     val cfg = Config()
 
     fun first() {
-        //configファイルの読み込み
+        //https://hirauchi-genta.com/kotlin-room/
+        //try {
+        //    DatabaseControl.createDatabaseAndTable()
+        //} catch (e: Exception) {
+        //    e.printStackTrace()
+        //}
+
 
         try {
             // Login 処理
@@ -38,8 +45,10 @@ class BotBuild() {
             val guild = jda.getGuildById(cfg.GUILDID)!!
 
             // 登録するコマンドを作成
-            var registCommands = listOf<CommandData>()
+            var registCommands = mutableListOf<CommandData>()
 
+            //listOfのリストだとimmutableな為、+=は出来るが直に追加するのではなく、registCommands + 新規スラッシュコマンド　を
+            // 「代入」という形になるので直接追加するにはmutableListOfで初期化する必要がある
             registCommands += Commands.slash("setting", "最初に一度行う初期設定用のコマンドです。")
                 .addOption(OptionType.STRING, "name", "名前を入力してください。")
                 .addOption(OptionType.STRING, "id", "学籍番号を入力してください。")
