@@ -8,6 +8,7 @@ import net.dv8tion.jda.api.interactions.commands.build.Commands
 import net.dv8tion.jda.api.requests.GatewayIntent
 import java.util.*
 import javax.security.auth.login.LoginException
+import kotlin.system.exitProcess
 
 class BotBuild() {
     val cfg = Config()
@@ -17,15 +18,24 @@ class BotBuild() {
 
         try {
             // Login 処理
-            val jda = JDABuilder.createLight(cfg.TOKEN, GatewayIntent.GUILD_MESSAGES, GatewayIntent.DIRECT_MESSAGES)
-                .addEventListeners(SlashCommandListener()) //処理するクラスを追加するメソッド
-                .setActivity(Activity.playing("作業")) // "～をプレイ中" の ～の部分
-                .build()
+            var jda: Any
+            try {
+                jda = JDABuilder.createLight(cfg.TOKEN, GatewayIntent.GUILD_MESSAGES, GatewayIntent.DIRECT_MESSAGES)
+                    .addEventListeners(SlashCommandListener()) //処理するクラスを追加するメソッド
+                    .setActivity(Activity.playing("作業")) // "～をプレイ中" の ～の部分
+                    .build()
+            } catch (e: IllegalArgumentException) {
+                println("failed reading setting.properties.")
+                exitProcess(-1)
+            } catch (e: LoginException) {
+                println("missing token.")
+                exitProcess(-1)
+            }
             // ログインが完了するまで待つ
             jda.awaitReady()
 
             //guildをidから取得する
-            val guild = jda.getGuildById(cfg.guildid)!!
+            val guild = jda.getGuildById(cfg.GUILDID)!!
 
             // 登録するコマンドを作成
             var registCommands = listOf<CommandData>()
@@ -45,11 +55,10 @@ class BotBuild() {
                 .addCommands(registCommands) //Commands.slash単体でもそれらの配列であるCommandDataを投げても動作する
                 .queue()
 
-        } catch (e: LoginException) {
+        } catch (e: Exception) {
             e.printStackTrace()
         }
     }
-
 }
 
 fun main() {
